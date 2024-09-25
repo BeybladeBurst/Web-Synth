@@ -1,0 +1,39 @@
+<!doctype html>
+<title>Synth</title>
+<meta charset="utf-8">
+<link rel="stylesheet" href="synth.css">
+<script src="UX.js"></script>
+<script src="essentials.js"></script>
+
+<aside id="keyboard"></aside>
+<form>
+    <fieldset>
+        <legend>Wave</legend>
+        <spin-knob name="waveform" options='["Custom","Sine","Sawtooth","Square","Triangle"]' title="Waveform"></spin-knob>
+        <spin-knob name="volume" range='{"min":0,"max":1,"value":0.8}' unit="%" title="Volume"></spin-knob>
+        <spin-knob name="time-scale" range='{"min":0,"max":2,"value":1}' unit="s" title="100% Time" class="time-scale"></spin-knob>
+    </fieldset>
+    <fieldset>
+        <legend>Detuned</legend>
+        <spin-knob name="unison-detune-1" range='{"min":-25,"max":25,"value":0}' unit="c" title="1"></spin-knob>
+        <spin-knob name="unison-detune-2" range='{"min":-25,"max":25,"value":0}' unit="c" title="2"></spin-knob>
+    </fieldset>
+    <fieldset>
+        <legend>Delay</legend>
+        <spin-knob name="delay-time" range='{"min":0,"max":1,"value":0.5}' unit="s" title="Time"></spin-knob>
+        <spin-knob name="delay-feedback" range='{"min":0,"max":1,"value":0.5}' unit="%" title="Feedback"></spin-knob>
+    </fieldset>
+    <fieldset>
+        <legend>Envelope</legend>
+        <spin-knob name="envelope-a" range='{"min":0,"max":1,"value":0.1}' unit="%" title="Attack" class="time-scale"></spin-knob>
+        <spin-knob name="envelope-d" range='{"min":0,"max":1,"value":0.2}' unit="%" title="Decay" class="time-scale"></spin-knob>
+        <spin-knob name="envelope-s" range='{"min":0,"max":1,"value":0.5}' unit="%" title="Sustain"></spin-knob>
+        <spin-knob name="envelope-r" range='{"min":0,"max":1,"value":0.5}' unit="%" title="Release" class="time-scale"></spin-knob>
+    </fieldset>
+    <fieldset>
+        <legend>LFO for pitch (Vibrato)</legend>
+        <spin-knob name="vibrato-amount" range='{"min":0,"max":5,"value":1}' title="Amount"></spin-knob>
+        <spin-knob name="vibrato-speed" range='{"min":0,"max":30,"value":10}' title="Speed"></spin-knob>
+    </fieldset>
+</form>
+<script src=synth.js></script>
