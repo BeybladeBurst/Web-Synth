@@ -65,27 +65,11 @@ class Keyboard {
         envelope.connect(audioContext.destination); 
         envelope.connect(feedback).connect(delay).connect(audioContext.destination);
         delay.connect(feedback);
-          
+    
         const osc = new Oscillators(Knobs.waveform.toLowerCase(), button.dataset.frequency, Knobs['unison-detune-1'], Knobs['unison-detune-2'], envelope);
+        new Oscillator('LFO', Knobs['vibrato-speed'], Knobs['vibrato-amount']).connect(osc.osc[0].oscillator.frequency);
+        new Oscillator('LFO', 10, 2).connect(envelope);
         
-        const lfoGainV = audioContext.createGain();
-        lfoGainV.gain.setValueAtTime(Knobs['vibrato-amount'], 0);
-        lfoGainV.connect(osc.osc[0].oscillator.frequency)
-    
-        const lfoV = audioContext.createOscillator();
-        lfoV.frequency.setValueAtTime(Knobs['vibrato-speed'], 0);
-        lfoV.start(0);
-        lfoV.connect(lfoGainV); 
-
-        const lfoGainT = audioContext.createGain();
-        lfoGainT.gain.setValueAtTime(2, 0);
-        lfoGainT.connect(envelope)
-    
-        const lfoT = audioContext.createOscillator();
-        lfoT.frequency.setValueAtTime(5, 0);
-        lfoT.start(0);
-        lfoT.connect(lfoGainT); 
-
         osc.start();
         Oscillators.map.set(button.dataset.pitch, osc);
     }
@@ -118,16 +102,27 @@ class Effect {
 class Oscillator {
     constructor(type, frequency, detune, envelope) {
         this.oscillator = audioContext.createOscillator();
+        if (type == 'LFO') {
+            this.gain = audioContext.createGain();
+            this.gain.gain.setValueAtTime(detune, 0);
+
+            this.oscillator.frequency.setValueAtTime(frequency, 0);
+            this.oscillator.start(0);
+            this.oscillator.connect(this.gain);
+            return;
+        }
         this.oscillator.connect(envelope);
         if (type == "custom") {
             let sineTerms = new Float32Array([0, 0, 1, 0, 1]);
             let cosineTerms = new Float32Array(sineTerms.length);
             this.oscillator.setPeriodicWave(audioContext.createPeriodicWave(cosineTerms, sineTerms));
-        } else
+        } 
+        else
             this.oscillator.type = type;
         this.oscillator.frequency.value = frequency;
         this.oscillator.detune.value = detune;
     }
+    connect(what) {this.gain.connect(what);}
     start() {this.oscillator.start();}
     stop(t) {this.oscillator.stop(t);}
 }

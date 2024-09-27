@@ -76,3 +76,8 @@ aside {
 spin-knob.time-scale data {
     border-bottom:.1em solid;
 }
+@media (orientation:portrait) {
+    form {
+        margin-left:10em;
+    }
+}
